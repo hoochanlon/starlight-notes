@@ -2,9 +2,6 @@
 title: Astro-Paper 简要配置
 ---
 
-{% aside %}
-一些在旁白中的内容。
-{% /aside %}
 
 ## 坑点避雷
 
@@ -78,7 +75,6 @@ jobs:
 
 pnpm 更新：`pnpm install --frozen-lockfile`
 
-<img width="1157" height="539" alt="image" src="https://github.com/user-attachments/assets/c356fccb-d3e7-4aa1-9c1e-4c192e1694f1" />
 
 
 **AstroPaper缓存策略与性能调优**
@@ -156,7 +152,6 @@ return includeBase ? </span><span class="token string">/posts/</span><span class
 
 https://blog.csdn.net/gitblog_00592/article/details/152524702
 
-<img width="856" height="425" alt="image" src="https://github.com/user-attachments/assets/7b03cde3-81fc-43c4-b134-ee45bd40416f" />
 
 ## 字体修改
 
@@ -552,7 +547,7 @@ function uint8ToBase64(bytes: Uint8Array): string {
 
 `\src\content.config.ts`
 
-```ts title="/src/content.config.ts" showNumbers ins={23}
+```ts title="/src/content.config.ts" showNumbers ins={23} collapse={12-21}
 
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";

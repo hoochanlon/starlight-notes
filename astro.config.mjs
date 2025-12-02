@@ -9,14 +9,14 @@ import markdoc from '@astrojs/markdoc';
 export default defineConfig({
    site: 'https://hoochanlon.github.io',
    base: 'starlight-notes',
-      markdown: {
-    rehypePlugins: [
-      [
-        rehypeExternalLinks,
-        {
-          target: "\_blank",
-          rel: ["noopener", "noreferrer", "external"],
-        },
+    markdown: {
+      rehypePlugins: [
+        [
+          rehypeExternalLinks,
+          {
+            target: "\_blank",
+            rel: ["noopener", "noreferrer", "external"],
+          },
       ],
     ],
   },
@@ -46,3 +46,5 @@ export default defineConfig({
         ],
         }), markdoc()],
 });
+
+
