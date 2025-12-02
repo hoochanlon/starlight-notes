@@ -1,3 +1,3 @@
-# Starlight Starter Kit: Basics
+# Starlight Notes
 
-笔记
+基于 Astro Starlight 构建的个人笔记文档。
