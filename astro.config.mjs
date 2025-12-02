@@ -22,6 +22,12 @@ export default defineConfig({
   },
     integrations: [expressiveCode(), starlight({
         title: 'My Docs',
+        locales: {
+          root: {
+            label: '简体中文',
+            lang: 'zh-CN',
+          },
+      },
         social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/hoochanlon' }],
         editLink: {
             baseUrl: 'https://github.com/hoochanlon/starlight-notes/edit/master',
