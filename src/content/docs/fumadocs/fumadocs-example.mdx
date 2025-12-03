@@ -1,5 +1,39 @@
 ---
-title: Docusaurus 简要配置
+title: Fumadocs 简要配置
 ---
 
-![](https://img.cdn1.vip/i/6930093fa0591_1764755775.webp)
+## 前言
+
+在 docusaurus 不能完全支持 shiki 之前，我是不会用它的。版面布局跟 vuepress 很像。而 fumadocs 又和上古的 gitbook 挺像，所以还是决定用它。
+
+## 踩坑！不能插入图片的解决办法
+
+
+```
+import { createMDX } from 'fumadocs-mdx/next';
+
+const withMDX = createMDX();
+
+/** @type {import('next').NextConfig} */
+const config = {
+  reactStrictMode: true,
+
+  images: {
+    // 正确写法（Next.js 15 最新要求）
+    remotePatterns: [
+      // 放开所有 https 图片（开发/文档站最方便）
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+  },
+};
+
+export default withMDX(config);
+```
+
+![](https://images.sonurai.com/SaltDesert.jpg)
+
+## 数学公式支持
+
