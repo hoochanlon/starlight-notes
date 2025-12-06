@@ -1,0 +1,323 @@
+---
+title: Fumadocs 本地搜索
+---
+
+**注：本文完全由 cursor 生成。**
+
+本文档提供 Fumadocs 本地搜索功能的完整配置步骤，支持中文搜索和静态导出模式。
+
+## 需要创建/修改的文件
+
+1. ✅ `package.json` - 添加依赖
+2. ✅ `app/api/search/route.ts` - 创建搜索 API 路由（新建）
+3. ✅ `components/search.tsx` - 创建搜索组件（新建）
+4. ✅ `next.config.mjs` - 配置 basePath 和环境变量
+5. ✅ `app/layout.tsx` - 注册搜索组件
+6. ✅ `lib/source.ts` - 确保 baseUrl 配置正确（如已存在）
+
+---
+
+## 步骤 1: 安装依赖
+
+### 文件：`package.json`
+
+在 `dependencies` 中添加以下依赖：
+
+```json
+{
+  "dependencies": {
+    "@orama/orama": "^3.1.16",
+    "@orama/tokenizers": "^3.1.16",
+    "fumadocs-core": "^16.2.3",
+    "fumadocs-mdx": "^14.1.0",
+    "fumadocs-ui": "^16.2.3",
+    "lucide-react": "^0.552.0",
+    "next": "16.0.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}
+```
+
+**安装命令：**
+
+```bash
+pnpm install
+```
+
+---
+
+## 步骤 2: 创建搜索 API 路由
+
+### 文件：`app/api/search/route.ts`
+
+**新建文件，完整代码：**
+
+```typescript
+import { source } from '@/lib/source';
+import { createFromSource } from 'fumadocs-core/search/server';
+import { createTokenizer } from '@orama/tokenizers/mandarin';
+
+// 创建搜索API实例，包含GET和staticGET方法
+const { GET, staticGET } = createFromSource(source, {
+  // 配置中文支持
+  components: {
+    tokenizer: createTokenizer(),
+  },
+  search: {
+    threshold: 0,
+    tolerance: 0,
+  },
+});
+
+// 在静态导出模式下使用staticGET作为GET处理程序
+export { staticGET as GET };
+
+// 配置路由为静态可渲染
+export const dynamic = 'force-static';
+export const revalidate = false;
+```
+
+---
+
+## 步骤 3: 创建搜索组件
+
+### 文件：`components/search.tsx`
+
+**新建文件，完整代码：**
+
+```typescript
+'use client';
+import {
+  SearchDialog,
+  SearchDialogClose,
+  SearchDialogContent,
+  SearchDialogHeader,
+  SearchDialogIcon,
+  SearchDialogInput,
+  SearchDialogList,
+  SearchDialogOverlay,
+  type SharedProps,
+} from 'fumadocs-ui/components/dialog/search';
+import { useDocsSearch } from 'fumadocs-core/search/client';
+import { create } from '@orama/orama';
+import { useI18n } from 'fumadocs-ui/contexts/i18n';
+import { createTokenizer } from '@orama/tokenizers/mandarin';
+
+function initOrama() {
+  return create({
+    schema: { _: 'string' },
+    // 配置中文分词器
+    components: {
+      tokenizer: createTokenizer(),
+    },
+  });
+}
+
+export default function DefaultSearchDialog(props: SharedProps) {
+  const { locale } = useI18n();
+  // 获取 basePath，确保搜索 API 路径正确
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  const { search, setSearch, query } = useDocsSearch({
+    type: 'static',
+    initOrama,
+    locale,
+    // 指定搜索索引的 URL，包含 basePath
+    from: `${basePath}/api/search`,
+  });
+
+  return (
+    <SearchDialog
+      search={search}
+      onSearchChange={setSearch}
+      isLoading={query.isLoading}
+      {...props}
+    >
+      <SearchDialogOverlay />
+      <SearchDialogContent>
+        <SearchDialogHeader>
+          <SearchDialogIcon />
+          <SearchDialogInput />
+          <SearchDialogClose />
+        </SearchDialogHeader>
+        <SearchDialogList items={query.data !== 'empty' ? query.data : null} />
+      </SearchDialogContent>
+    </SearchDialog>
+  );
+}
+```
+
+---
+
+## 步骤 4: 配置 Next.js
+
+### 文件：`next.config.mjs`
+
+**修改文件，完整代码：**
+
+```javascript
+import { createMDX } from 'fumadocs-mdx/next';
+
+const withMDX = createMDX();
+
+// GitHub Pages 子路径配置（仅在构建时使用）
+// 如果部署在根路径，将 basePath 设置为空字符串 ''
+const basePath = process.env.NODE_ENV === 'production' ? '/fumadocs-notes' : '';
+
+/** @type {import('next').NextConfig} */
+const config = {
+  reactStrictMode: true,
+  // 启用静态导出模式
+  output: 'export',
+  // GitHub Pages 子路径配置
+  basePath,
+  // 添加尾部斜杠，有助于静态文件生成
+  trailingSlash: true,
+  // 设置环境变量，供客户端使用
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
+};
+
+export default withMDX(config);
+```
+
+**注意：** 如果部署在根路径，将 `basePath` 设置为空字符串 `''`。
+
+---
+
+## 步骤 5: 注册搜索组件
+
+### 文件：`app/layout.tsx`
+
+**修改文件，添加搜索组件注册：**
+
+```typescript
+import { RootProvider } from 'fumadocs-ui/provider/next';
+import './global.css';
+import SearchDialog from '@/components/search';
+
+export default function Layout({ children }: LayoutProps<'/'>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body className="flex flex-col min-h-screen">
+        <RootProvider
+          search={{
+            SearchDialog,
+          }}
+        >
+          {children}
+        </RootProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+---
+
+## 步骤 6: 配置内容源
+
+### 文件：`lib/source.ts`
+
+**检查文件，确保 `baseUrl` 不包含 `basePath`：**
+
+```typescript
+import { docs } from 'fumadocs-mdx:collections/server';
+import { type InferPageType, loader } from 'fumadocs-core/source';
+import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
+
+// baseUrl 不需要包含 basePath，Next.js 的 basePath 会自动处理前缀
+export const source = loader({
+  baseUrl: '/docs',
+  source: docs.toFumadocsSource(),
+  plugins: [lucideIconsPlugin()],
+});
+
+export function getPageImage(page: InferPageType<typeof source>) {
+  const segments = [...page.slugs, 'image.png'];
+
+  return {
+    segments,
+    // Next.js 的 basePath 会自动处理前缀，这里不需要手动添加
+    url: `/og/docs/${segments.join('/')}`,
+  };
+}
+
+export async function getLLMText(page: InferPageType<typeof source>) {
+  const processed = await page.data.getText('processed');
+
+  return `# ${page.data.title}
+
+${processed}`;
+}
+```
+
+**重要：** `baseUrl` 应该只使用 `/docs`，不要包含 `basePath`，否则会导致路径重复。
+
+---
+
+## 验证配置
+
+### 1. 构建项目
+
+```bash
+pnpm build
+```
+
+检查 `out/api/search` 目录是否生成了搜索索引文件。
+
+### 2. 本地测试
+
+```bash
+pnpm dev
+```
+
+按 `Ctrl+K` 或 `Cmd+K` 打开搜索框，测试搜索功能。
+
+---
+
+## 常见问题
+
+### 搜索功能在本地正常，但部署后返回 404
+
+**原因：** 搜索 API 路径缺少 `basePath`
+
+**解决：**
+1. 检查 `next.config.mjs` 中的 `NEXT_PUBLIC_BASE_PATH` 是否正确设置
+2. 检查 `components/search.tsx` 中的 `from` 参数是否包含 `basePath`
+
+### 路径重复问题（如 `/fumadocs-notes/fumadocs-notes/api/search`）
+
+**原因：** 在 `lib/source.ts` 中手动添加了 `basePath`
+
+**解决：** `baseUrl` 应该只使用 `/docs`，不要包含 `basePath`
+
+### 中文搜索不工作
+
+**原因：** 未正确配置中文分词器
+
+**解决：**
+1. 确保已安装 `@orama/tokenizers`
+2. 在服务器端和客户端都配置了 `createTokenizer()`
+3. 设置了 `search.threshold: 0` 和 `search.tolerance: 0`
+
+---
+
+## 配置检查清单
+
+- [ ] 已安装所有必需的依赖
+- [ ] 已创建 `app/api/search/route.ts` 文件
+- [ ] 已创建 `components/search.tsx` 文件
+- [ ] `next.config.mjs` 中已配置 `basePath` 和 `NEXT_PUBLIC_BASE_PATH`
+- [ ] `app/layout.tsx` 中已注册搜索组件
+- [ ] `lib/source.ts` 中的 `baseUrl` 不包含 `basePath`
+- [ ] 构建成功，生成了搜索索引文件
+- [ ] 本地测试搜索功能正常
+
+---
+
+## 参考资料
+
+- [Fumadocs 搜索文档](https://fumadocs-zh.zdoc.app/docs/headless/search/orama)
+- [Orama 文档](https://docs.orama.com/)

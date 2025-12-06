@@ -61,6 +61,7 @@ export default defineConfig({
                 items: [
                     { label: 'fumadocs 简要配置', slug: 'fumadocs/fumadocs-example' },
                     { label: 'fumadocs 目录路由配置', slug: 'fumadocs/fumadocs-route' },
+                    { label: 'fumadocs 本地搜索', slug: 'fumadocs/fumadocs-search' },
                 ],
             },
         ],
