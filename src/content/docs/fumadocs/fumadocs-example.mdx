@@ -40,6 +40,33 @@ export default withMDX(config);
 
 浏览器广告屏蔽/翻译/暗黑模式等扩展在 React hydrate 之前偷偷修改了服务端渲染的 HTML，导致客户端看到的 DOM 和 React 预期的不一致，触发水合错误。
 
+## 找到不错的例子，减少折腾
+
+官方给的教程过于抽象，很多坑都要踩了才懂。而有一个现成调试好的例子就显得尤为必要了。
+
+sh2aliyev/notes：https://github.com/sh2aliyev/notes
+
+
+## 站点标题
+
+\lib\layout.shared.tsx
+
+```tsx
+import { BookIcon } from 'lucide-react';
+import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
+
+export function baseOptions(): BaseLayoutProps {
+  return {
+    nav: {
+      title: 'Fumadocs Notes',
+    },
+  };
+}
+```
+
+\app\og\docs\[...slug]\route.tsx 搜索 `site=`，更改
+
+
 ## 数学公式支持
 
 运行
