@@ -26,6 +26,15 @@ importers:
       '@expressive-code/plugin-line-numbers':
         specifier: ^0.41.3
         version: 0.41.3
+      '@fontsource/inter':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@fontsource/jetbrains-mono':
+        specifier: ^5.2.8
+        version: 5.2.8
+      '@six-tech/starlight-theme-six':
+        specifier: ^1.0.16
+        version: 1.0.16(@astrojs/starlight@0.37.0(astro@5.16.3(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3)))(@fontsource/inter@5.2.8)(@fontsource/jetbrains-mono@5.2.8)(sharp@0.34.5)
       astro:
         specifier: ^5.6.1
         version: 5.16.3(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3)
@@ -41,7 +50,13 @@ importers:
       starlight-image-zoom:
         specifier: ^0.13.2
         version: 0.13.2(@astrojs/starlight@0.37.0(astro@5.16.3(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3)))
+      starlight-theme-flexoki:
+        specifier: ^0.2.1
+        version: 0.2.1(@astrojs/starlight@0.37.0(astro@5.16.3(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3)))
       starlight-theme-galaxy:
+        specifier: ^0.5.2
+        version: 0.5.2(@astrojs/starlight@0.37.0(astro@5.16.3(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3)))
+      starlight-theme-rapide:
         specifier: ^0.5.2
         version: 0.5.2(@astrojs/starlight@0.37.0(astro@5.16.3(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3)))
 
@@ -308,6 +323,12 @@ packages:
 
   '@fontsource-variable/jetbrains-mono@5.2.8':
     resolution: {integrity: sha512-WBA9elru6Jdp5df2mES55wuOO0WIrn3kpXnI4+W2ek5u3ZgLS9XS4gmIlcQhiZOWEKl95meYdvK7xI+ETLCq/Q==}
+
+  '@fontsource/inter@5.2.8':
+    resolution: {integrity: sha512-P6r5WnJoKiNVV+zvW2xM13gNdFhAEpQ9dQJHt3naLvfg+LkF2ldgSLiF4T41lf1SQCM9QmkqPTn4TH568IRagg==}
+
+  '@fontsource/jetbrains-mono@5.2.8':
+    resolution: {integrity: sha512-6w8/SG4kqvIMu7xd7wt6x3idn1Qux3p9N62s6G3rfldOUYHpWcc2FKrqf+Vo44jRvqWj2oAtTHrZXEP23oSKwQ==}
 
   '@img/colour@1.0.0':
     resolution: {integrity: sha512-A5P/LfWGFSl6nsckYtjw9da+19jB8hkJ6ACTGcDfEJ0aE+l2n2El7dsVM7UVHZQ9s2lmYMWlrS21YLy2IR1LUw==}
@@ -639,6 +660,14 @@ packages:
 
   '@shikijs/vscode-textmate@10.0.2':
     resolution: {integrity: sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==}
+
+  '@six-tech/starlight-theme-six@1.0.16':
+    resolution: {integrity: sha512-nEon5Ce1IxmivIzYYYT9iiMCAKQ9r1G9z6/jtZNHt4ZgTFllEtj2KLjquLnJc5vYV8vpm3Df9iOrhRTlRSQsqQ==}
+    peerDependencies:
+      '@astrojs/starlight': '>=0.30.0'
+      '@fontsource/inter': ^5.2.6
+      '@fontsource/jetbrains-mono': ^5.2.6
+      sharp: '>=0.32.0 || >=0.33.0'
 
   '@swc/helpers@0.5.17':
     resolution: {integrity: sha512-5IKx/Y13RsYd+sauPb2x+U/xZikHjolzfuDgTAl/Tdf3Q8rslRvC19NKDLgAJQ6wsqADk10ntlv08nPFw/gO/A==}
@@ -1203,6 +1232,11 @@ packages:
   markdown-table@3.0.4:
     resolution: {integrity: sha512-wiYz4+JrLyb/DqW2hkFJxP7Vd7JuTDm77fvbM8VfEQdmSMqcImWeeRbHwZjBjIFki/VaMK2BhFi7oUUZeM5bqw==}
 
+  marked@15.0.12:
+    resolution: {integrity: sha512-8dD6FusOQSrpv9Z1rdNMdlSgQOIP880DHqnohobOmYLElGEqAL/JvxvuxZO16r4HtjTlfPRDC1hbvxC9dPN2nA==}
+    engines: {node: '>= 18'}
+    hasBin: true
+
   mdast-util-definitions@6.0.0:
     resolution: {integrity: sha512-scTllyX6pnYNZH/AIp/0ePz6s4cZtARxImwoPJ7kS42n+MnVsI4XbnG6d4ibehRIldYMWM2LD7ImQblVhUejVQ==}
 
@@ -1628,11 +1662,23 @@ packages:
     peerDependencies:
       '@astrojs/starlight': '>=0.32.0'
 
+  starlight-theme-flexoki@0.2.1:
+    resolution: {integrity: sha512-du3B8k6INoCcx3i7o+jO+CANKddzfZ6Iz41DFXP4m+hm/jjjVJrg4uEKG6hEtddL0GiB25Lq3XZGpYNskPUqsg==}
+    engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0}
+    peerDependencies:
+      '@astrojs/starlight': '>=0.34'
+
   starlight-theme-galaxy@0.5.2:
     resolution: {integrity: sha512-Df0V3dxq85dgP25wDCFdKSujJvkntnRF/YEWaukvyAJmviKr9sI62PiZ5oXbwYWzHf1yP5NikfGajBpxez270w==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0}
     peerDependencies:
       '@astrojs/starlight': '>=0.34'
+
+  starlight-theme-rapide@0.5.2:
+    resolution: {integrity: sha512-4kNJutt0/3E0rjZvG9hvKeTTHGOHC97t2ZQDwDcokTM25yLgxavFu7BCm2Dm2UTw7fJpRXpu4gUWJ9xAOBmNww==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@astrojs/starlight': '>=0.34.0'
 
   stream-replace-string@2.0.0:
     resolution: {integrity: sha512-TlnjJ1C0QrmxRNrON00JvaFFlNh5TTG00APw23j74ET7gkQpTASi6/L2fuiav8pzK715HXtUeClpBTw2NPSn6w==}
@@ -2207,6 +2253,10 @@ snapshots:
 
   '@fontsource-variable/jetbrains-mono@5.2.8': {}
 
+  '@fontsource/inter@5.2.8': {}
+
+  '@fontsource/jetbrains-mono@5.2.8': {}
+
   '@img/colour@1.0.0': {}
 
   '@img/sharp-darwin-arm64@0.34.5':
@@ -2468,6 +2518,15 @@ snapshots:
       '@types/hast': 3.0.4
 
   '@shikijs/vscode-textmate@10.0.2': {}
+
+  '@six-tech/starlight-theme-six@1.0.16(@astrojs/starlight@0.37.0(astro@5.16.3(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3)))(@fontsource/inter@5.2.8)(@fontsource/jetbrains-mono@5.2.8)(sharp@0.34.5)':
+    dependencies:
+      '@astrojs/starlight': 0.37.0(astro@5.16.3(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3))
+      '@fontsource/inter': 5.2.8
+      '@fontsource/jetbrains-mono': 5.2.8
+      '@pagefind/default-ui': 1.4.0
+      marked: 15.0.12
+      sharp: 0.34.5
 
   '@swc/helpers@0.5.17':
     dependencies:
@@ -3239,6 +3298,8 @@ snapshots:
   markdown-extensions@2.0.0: {}
 
   markdown-table@3.0.4: {}
+
+  marked@15.0.12: {}
 
   mdast-util-definitions@6.0.0:
     dependencies:
@@ -4100,6 +4161,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  starlight-theme-flexoki@0.2.1(@astrojs/starlight@0.37.0(astro@5.16.3(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3))):
+    dependencies:
+      '@astrojs/starlight': 0.37.0(astro@5.16.3(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3))
+
   starlight-theme-galaxy@0.5.2(@astrojs/starlight@0.37.0(astro@5.16.3(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3))):
     dependencies:
       '@astrojs/starlight': 0.37.0(astro@5.16.3(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3))
@@ -4107,6 +4172,10 @@ snapshots:
       '@expressive-code/plugin-line-numbers': 0.41.3
       '@fontsource-variable/inter': 5.2.8
       '@fontsource-variable/jetbrains-mono': 5.2.8
+
+  starlight-theme-rapide@0.5.2(@astrojs/starlight@0.37.0(astro@5.16.3(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3))):
+    dependencies:
+      '@astrojs/starlight': 0.37.0(astro@5.16.3(@types/node@24.10.1)(rollup@4.53.3)(typescript@5.9.3))
 
   stream-replace-string@2.0.0: {}
 

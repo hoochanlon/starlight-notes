@@ -6,6 +6,8 @@ import rehypeExternalLinks from "rehype-external-links";
 import markdoc from '@astrojs/markdoc';
 import starlightImageZoom from 'starlight-image-zoom';
 import starlightThemeGalaxy from 'starlight-theme-galaxy';
+import starlightThemeRapide from 'starlight-theme-rapide';
+import starlightThemeFlexoki from 'starlight-theme-flexoki';
 
 // https://astro.build/config
 export default defineConfig({
@@ -25,7 +27,7 @@ export default defineConfig({
     integrations: [expressiveCode(), starlight({
         plugins: [
           starlightImageZoom(),
-          starlightThemeGalaxy(),
+          starlightThemeFlexoki(),
         ],
         title: 'My Docs',
         locales: {
