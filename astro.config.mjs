@@ -42,7 +42,7 @@ export default defineConfig({
       },
         social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/hoochanlon' }],
         editLink: {
-            baseUrl: 'https://github.com/hoochanlon/starlight-notes/edit/master',
+            baseUrl: 'https://github.com/hoochanlon/docs/edit/master',
         },
         sidebar: [
             {
