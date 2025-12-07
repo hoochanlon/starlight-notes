@@ -287,6 +287,7 @@ function calculateTotal(items) {
 @import 'fumadocs-ui/css/ocean.css';
 @import 'fumadocs-ui/css/preset.css';
 
+
 /* 增强版行号样式 */
 .shiki:has(.line:nth-child(3)) {
   counter-reset: line;
@@ -294,17 +295,38 @@ function calculateTotal(items) {
 }
 
 /* 行号背景仅作用于代码区域，不影响标题 */
+/* 使用与代码块背景相同的变量颜色 */
 .shiki:has(.line:nth-child(3)) pre {
   background: linear-gradient(90deg,
-    rgba(0, 0, 0, 0.02) 0,
-    rgba(0, 0, 0, 0.02) 3.5rem,
-    transparent 3.5rem
+    hsl(var(--muted) / 0.3) 0,
+    hsl(var(--muted) / 0.3) 3rem,  /* 缩小到 3rem */
+    transparent 3rem
   );
   margin: 0;
+  position: relative;
+}
+
+/* 添加行号与代码之间的实线分隔 */
+/* 浅色主题：使用深灰色，与背景色明显区分 */
+.shiki:has(.line:nth-child(3)) pre::after {
+  content: '';
+  position: absolute;
+  left: 3rem;  /* 调整到 3rem */
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #d1d5db;  /* 浅色主题下的深灰色，明显可见 */
+  z-index: 1;
+}
+
+/* 深色主题：使用浅灰色，与背景色明显区分 */
+.dark .shiki:has(.line:nth-child(3)) pre::after {
+  background: #6b7280;  /* 深色主题下的浅灰色，明显可见 */
 }
 
 .shiki:has(.line:nth-child(3)) .line {
-  padding-left: 3.6rem;
+  /* 行号在分隔线左侧，代码在分隔线右侧 */
+  padding-left: 3.1rem;  /* 调整到 3.1rem，稍微缩小 */
   position: relative;
   /* 关键修复：使用正确的行高和高度计算 */
   line-height: 1.6em; /* 使用 em 单位，与字体大小保持一致 */
@@ -316,21 +338,22 @@ function calculateTotal(items) {
   counter-increment: line;
   content: counter(line);
   position: absolute;
-  left: 0.6rem;
-  width: 3rem;
+  /* 行号位置：在分隔线（3rem）的左侧，右对齐 */
+  left: 0.5rem;  /* 稍微缩小左边距 */
+  width: 2.0rem;  /* 稍微缩小宽度 */
   text-align: right;
+  padding-right: 0.1rem;  /* 在分隔线左侧留出小间距 */
   color: #6b7280;
   font-size: 1.1rem;
   opacity: 0.9;
   font-family: ui-monospace, 'SF Mono', Monaco, 'Cascadia Code', Consolas, monospace;
   font-weight: 400;
-  
+
   /* 关键修复：使用相同的行高和垂直居中 */
   line-height: 1.6em;  /* 与 .line 保持一致 */
   height: 1.6em;      /* 设置明确的高度 */
   top: 50%;           /* 使用 top 和 transform 实现精确居中 */
   transform: translateY(-50%);
-  padding-right: 0.5rem;
   box-sizing: border-box;
 }
 
@@ -362,14 +385,12 @@ function calculateTotal(items) {
   font-family: ui-monospace, 'SF Mono', Monaco, 'Cascadia Code', Consolas, monospace;
 }
 
-/* 已移除：行号悬浮效果 */
-
-/* 深色主题优化 */
+/* 深色主题优化 - 使用相同的变量颜色 */
 .dark .shiki:has(.line:nth-child(3)) pre {
   background: linear-gradient(90deg,
-    rgba(255, 255, 255, 0.04) 0,
-    rgba(255, 255, 255, 0.04) 3.5rem,
-    transparent 3.5rem
+    hsl(var(--muted) / 0.3) 0,
+    hsl(var(--muted) / 0.3) 3rem,  /* 缩小到 3rem */
+    transparent 3rem
   );
 }
 

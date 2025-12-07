@@ -1,0 +1,96 @@
+/* 苹方字体 CDN - 使用系统字体栈（苹方是 macOS/iOS 系统字体） */
+@import url('https://cdn.jsdelivr.net/gh/hoochanlon/fonts@refs/heads/main/assets/Mengshen-Regular/result.css');
+
+/* 全局字体设置 - 优先使用苹方，回退到其他中文字体 */
+* {
+    font-family: 
+        "Mengshen-Regular",
+}
+
+/* 中文标题字体大小 */
+h1 {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 1.2em 0 0.8em 0;
+}
+
+h2 {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 1em 0 0.6em 0;
+}
+
+h3 {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0.9em 0 0.5em 0;
+}
+
+h4 {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.5;
+    margin: 0.8em 0 0.4em 0;
+}
+
+h5 {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.5;
+    margin: 0.7em 0 0.3em 0;
+}
+
+h6 {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+    margin: 0.6em 0 0.3em 0;
+}
+
+/* 中文段落字体大小 */
+p {
+    font-size: 16px;
+    line-height: 1.8;
+    margin: 0.8em 0;
+    color: inherit;
+}
+
+/* 中文链接字体大小 */
+a {
+    font-size: 16px;
+    line-height: 1.8;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* span 标签字体大小（通常用于内联文本） */
+span {
+    font-size: 16px;
+    line-height: inherit;
+}
+
+/* div 容器字体大小（继承或默认） */
+div {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* 侧边栏文章板块字体 */
+.astro-xouerbd5{
+    font-size: 18px;
+}
+
+/* 目录字体 */
+#starlight__on-this-page{
+    font-size: 18px;
+}
+.astro-eddxjfjq{
+    font-size: 16px;
+}

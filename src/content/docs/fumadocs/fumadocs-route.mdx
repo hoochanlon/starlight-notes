@@ -5,7 +5,7 @@ title: Fumadocs 目录路由配置
 ## 目录
 
 
-[提示]：对于习惯了用一个配置文件控制所有目录路由，以及可以根据 slug 来定位永久路由的管理方式，fumadocs 的路由逻辑简直抽象。需要不断摸索。
+[提示]：对于习惯了用一个配置文件控制所有目录路由，以及可以根据 slug 来定位永久路由的管理方式，fumadocs 的路由逻辑简直抽象。需要不断摸索。路由迁移与Github Pages配置部分由AI生成。
 
 在 Fumadocs 中，当缺少 meta.json 文件时，系统会默认按照文件名的字母顺序来确定页面的展示顺序。你可以通过在文件名前添加数字或字母前缀（例如 01-xxx.mdx、a-intro.mdx）来手动控制排序。此外，在任意文件夹中创建 index.mdx 文件，即可直接将该文件夹作为内容板块来展示。
 
@@ -26,7 +26,7 @@ title: Fumadocs 目录路由配置
 ![ ](https://tu.zbhz.org/i/2025/12/06/ne4btm.png)
 
 
-## 示例
+### 示例
 
 \docs\demo-1\meta.json
 
@@ -48,3 +48,309 @@ title: Fumadocs 目录路由配置
 ## 主页面
 
 \app\(home)\page.tsx
+
+[`./docs` 默认界面如何实现类似的文档门户页面，用于展示不同模块的文档入口？](https://github.com/fuma-nama/fumadocs/issues/2720)
+
+> you can create a page at `/docs` like `/(home)/docs/page.tsx`, and make the docs catch-all route non-optional.
+
+## Docs 到 Notes 迁移文档
+
+本文档详细记录了将 Fumadocs 项目中的文档路由从 `/docs` 迁移到 `/notes` 的完整过程。
+
+### 迁移概述
+
+本次迁移的目标是将所有与文档相关的路由、配置和内容路径从 `docs` 统一更改为 `notes`，使应用程序的路由结构更加清晰和符合项目定位。
+
+#### 主要变更点
+
+1. **核心配置文件**：更新 `lib/source.ts` 中的内容集合引用和路由配置
+2. **路由结构**：验证并确保 `app/notes` 目录包含正确的路由配置
+3. **OG 图片生成**：更新图片生成路径以保持一致性
+4. **内容路径**：确保所有笔记内容都通过 `/notes` 路由访问
+
+### 详细迁移步骤
+
+#### 步骤 1：检查现有项目结构
+
+在开始迁移前，先了解项目的基本结构：
+
+```bash
+# 查看主要目录结构
+ls -la app/
+```
+
+确保项目中已经存在 `app/notes` 目录，且包含正确的路由配置文件。
+
+#### 步骤 2：更新核心配置文件
+
+修改 `lib/source.ts` 文件，将所有 `docs` 引用替换为 `notes`：
+
+```typescript
+// 原代码
+import { docs } from 'fumadocs-mdx:collections/server';
+
+// 修改后
+import { notes } from 'fumadocs-mdx:collections/server';
+
+// 原代码
+export const source = loader({
+  baseUrl: '/docs',
+  source: docs.toFumadocsSource(),
+  plugins: [lucideIconsPlugin()],
+});
+
+// 修改后
+export const source = loader({
+  baseUrl: '/notes',
+  source: notes.toFumadocsSource(),
+  plugins: [lucideIconsPlugin()],
+});
+
+// 更新 OG 图片路径
+// 原代码
+url: `/og/docs/${segments.join('/')}`,
+
+// 修改后
+url: `/og/notes/${segments.join('/')}`,
+```
+
+#### 步骤 3：验证路由配置
+
+确保 `app/notes` 目录包含正确的路由配置文件：
+
+```bash
+# 检查 notes 路由配置
+ls -la app/notes/
+```
+
+应该看到以下文件结构：
+```
+app/notes/
+├── [[...slug]]/
+│   └── page.tsx
+└── layout.tsx
+```
+
+#### 步骤 4：移除旧的 docs 路由配置
+
+如果项目中仍然存在 `app/docs` 目录，需要将其移除：
+
+```bash
+# 删除旧的 docs 路由目录
+rm -rf app/docs
+```
+
+#### 步骤 5：更新 OG 图片生成路径
+
+检查并更新 `app/og` 目录下的配置：
+
+1. 确保 `app/og/notes` 目录存在且配置正确
+2. 移除不再需要的 `app/og/docs` 目录：
+
+```bash
+# 删除旧的 docs OG 配置目录
+rm -rf app/og/docs
+```
+
+#### 步骤 6：检查首页链接
+
+确保首页上的导航链接指向正确的路径：
+
+```typescript
+// 原代码
+<Link href="/docs/essay">浏览文档</Link>
+
+// 修改后
+<Link href="/notes/essay">浏览笔记</Link>
+```
+
+#### 步骤 7：验证内容路径
+
+确保所有笔记内容都存储在 `content/notes` 目录下：
+
+```bash
+# 检查内容目录结构
+ls -la content/
+```
+
+应该看到以下结构：
+```
+content/
+└── notes/
+    ├── astro/
+    ├── essay/
+    └── meta.json
+```
+
+#### 步骤 8：运行应用程序验证
+
+启动开发服务器，验证迁移是否成功：
+
+```bash
+# 启动开发服务器
+pnpm dev
+```
+
+检查以下内容：
+1. 应用程序是否正常启动，无编译错误
+2. 首页链接是否指向 `/notes/essay`
+3. 笔记内容是否可以通过 `/notes` 路由正常访问
+4. OG 图片是否正确生成
+
+### 配置验证
+
+完成迁移后，需要验证以下配置项：
+
+#### 1. 内容集合引用
+
+确保 `lib/source.ts` 中正确导入了 `notes` 集合：
+
+```typescript
+import { notes } from 'fumadocs-mdx:collections/server';
+```
+
+#### 2. 路由配置
+
+确保 `app/notes/[[...slug]]/page.tsx` 文件包含正确的路由处理逻辑：
+
+```typescript
+import { source } from '@/lib/source';
+import { DocsPage } from 'fumadocs-ui/page';
+
+export default function Page({ params }: { params: { slug?: string[] } }) {
+  return <DocsPage params={params} source={source} />;
+}
+
+// generateStaticParams 和 generateMetadata 函数
+```
+
+#### 3. OG 图片生成
+
+确保 `app/og/notes/[...slug]/route.tsx` 文件正确配置：
+
+```typescript
+import { getPageImage } from '@/lib/source';
+import { source } from '@/lib/source';
+import { DefaultImage } from 'fumadocs-ui/og';
+
+// GET 函数和 generateStaticParams 函数
+```
+
+### 部署注意事项
+
+#### GitHub Pages 路径配置
+
+如果项目部署在 GitHub Pages 上，需要注意路径配置的一致性：
+
+1. 确保 `next.config.mjs` 中的 `basePath` 配置正确
+2. 确保 `lib/source.ts` 中的 `baseUrl` 与 `basePath` 配合使用，避免路径重复
+
+详细配置说明请参考 `GITHUB_PAGES_CONFIG.md` 文件。
+
+#### 内容链接更新
+
+如果笔记内容中包含内部链接，请确保这些链接也从 `/docs` 更新为 `/notes`。
+
+### 故障排除
+
+#### 404 错误
+
+如果访问 `/notes` 路由时出现 404 错误：
+
+1. 检查 `app/notes` 目录是否存在且配置正确
+2. 验证 `lib/source.ts` 中的 `baseUrl` 是否设置为 `/notes`
+3. 确保 `content/notes` 目录包含笔记内容
+
+#### 编译错误
+
+如果在启动开发服务器时遇到编译错误：
+
+1. 检查是否有遗漏的 `docs` 引用没有替换为 `notes`
+2. 验证所有导入路径是否正确
+3. 检查是否有文件或目录名称拼写错误
+
+### 总结
+
+完成以上步骤后，项目中的所有文档内容都应该可以通过 `/notes` 路由正常访问，而不是之前的 `/docs` 路由。迁移过程保持了应用程序的功能不变，但路由结构更加清晰和符合项目定位。
+
+
+
+
+
+## GitHub Pages 路径配置
+
+### 当前配置分析
+
+目前项目的路由配置如下：
+
+1. **Next.js 基础路径 (`next.config.mjs`)**：
+   ```javascript
+   const basePath = process.env.NODE_ENV === 'production' ? '/fumadocs-notes' : '';
+   ```
+   - 这是项目在 GitHub Pages 上的根路径
+   - 生产环境下，所有路由都会自动添加 `/fumadocs-notes` 前缀
+
+2. **Fumadocs 内容路径 (`lib/source.ts`)**：
+   ```javascript
+   export const source = loader({
+     baseUrl: '/notes',
+     // ...
+   });
+   ```
+   - 这是笔记内容的基础路径
+   - 所有笔记都会在 `/notes` 路径下访问
+
+### 路径问题说明
+
+如果您将 GitHub 仓库命名为 `notes`，那么：
+- GitHub Pages 会使用 `/notes` 作为网站的根路径
+- 结合 Fumadocs 的 `/notes` 基础路径
+- 最终访问路径会变成：`hoochonlon.github.io/notes/notes/xxxx`
+
+确实会出现重复的 `notes` 路径，这不是我们想要的。
+
+### 解决方案
+
+根据您的 GitHub 仓库名称，有两种解决方案：
+
+#### 方案一：保持仓库名为 `fumadocs-notes`
+- 访问路径：`hoochonlon.github.io/fumadocs-notes/notes/xxxx`
+- 不需要修改任何配置
+
+#### 方案二：将仓库重命名为 `notes`
+如果您希望仓库名为 `notes`，需要修改配置：
+
+1. 更新 `next.config.mjs` 中的基础路径：
+   ```javascript
+   const basePath = process.env.NODE_ENV === 'production' ? '/notes' : '';
+   ```
+
+2. 更新 `lib/source.ts` 中的内容路径：
+   ```javascript
+   export const source = loader({
+     baseUrl: '/',  // 将 '/notes' 改为 '/'，避免重复
+     // ...
+   });
+   ```
+
+   同时更新 OG 图片路径：
+   ```javascript
+   url: `/og/${segments.join('/')}`,  // 移除 '/notes' 前缀
+   ```
+
+3. 更新首页链接 (`app/(home)/page.tsx`)：
+   ```javascript
+   href="/essay"  // 将 '/notes/essay' 改为 '/essay'
+   ```
+
+这样修改后，访问路径会变成：`hoochonlon.github.io/notes/xxxx`（没有重复的 `notes`）
+
+### 部署前检查
+
+在部署到 GitHub Pages 之前，请确保：
+
+1. 仓库名称与 `next.config.mjs` 中的 `basePath` 一致
+2. `lib/source.ts` 中的 `baseUrl` 配置正确，避免路径重复
+3. 所有内部链接都使用了正确的路径
+
+

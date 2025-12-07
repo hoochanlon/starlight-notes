@@ -30,6 +30,10 @@ export default defineConfig({
           starlightThemeFlexoki(),
         ],
         title: 'My Docs',
+        customCss: [
+          // 你的自定义 CSS 文件的相对路径
+          './src/styles/custom.css',
+        ],
         locales: {
           root: {
             label: '简体中文',
